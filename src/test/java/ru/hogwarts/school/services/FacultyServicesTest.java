@@ -1,6 +1,7 @@
 package ru.hogwarts.school.services;
 
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.hogwarts.school.ExceptionHandler.NotFoundFaculty;
 import ru.hogwarts.school.model.Faculty;
@@ -10,16 +11,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class FacultyServicesTest {
 
-    private final FacultyServices facultyServices = new FacultyServices();
+    private FacultyServices facultyServices;
 
     private final Faculty test1 = new Faculty(0, "Test", "Blue");
     private final Faculty test2 = new Faculty(0, "Test2", "Green");
 
+    @BeforeEach
+    void init() {
+        facultyServices = new FacultyServices();
+    }
+
     @Test
     void add() {
-
+        int currentSize = facultyServices.getAllStudent().size();
         facultyServices.add(test1);
-        assertEquals(test1, facultyServices.get(1));
+        assertEquals(++currentSize, facultyServices.getAllStudent().size());
     }
 
     @Test
@@ -41,7 +47,9 @@ class FacultyServicesTest {
     void get() {
         facultyServices.add(test1);
         facultyServices.add(test2);
-        assertEquals(test1, facultyServices.get(1));
+        int currentSize = facultyServices.getAllStudent().size();
+
+        assertEquals(test2, facultyServices.get(test2.getId()));
     }
 
     @Test
@@ -52,9 +60,9 @@ class FacultyServicesTest {
 
     @Test
     void update() {
-        facultyServices.add(test1);
-        test2.setId(1);
-        assertEquals(test2, facultyServices.update(test2));
+        Faculty faculty = facultyServices.add(test1);
+        Faculty faculty1Change = new Faculty(faculty.getId(), "1", "2");
+        assertEquals(faculty1Change, facultyServices.update(faculty1Change));
 
     }
 
