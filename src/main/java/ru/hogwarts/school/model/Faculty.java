@@ -2,14 +2,14 @@ package ru.hogwarts.school.model;
 
 import java.util.Objects;
 
-public class Fuculty {
+public class Faculty {
     private long id;
-    private String namr;
+    private String name;
     private String color;
 
-    public Fuculty(long id, String namr, String color) {
+    public Faculty(long id, String namr, String color) {
         this.id = id;
-        this.namr = namr;
+        this.name = namr;
         this.color = color;
     }
 
@@ -21,12 +21,12 @@ public class Fuculty {
         this.id = id;
     }
 
-    public String getNamr() {
-        return namr;
+    public String getName() {
+        return name;
     }
 
-    public void setNamr(String namr) {
-        this.namr = namr;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getColor() {
@@ -40,13 +40,13 @@ public class Fuculty {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Fuculty)) return false;
-        Fuculty fuculty = (Fuculty) o;
-        return id == fuculty.id && Objects.equals(namr, fuculty.namr) && Objects.equals(color, fuculty.color);
+        if (!(o instanceof Faculty)) return false;
+        Faculty faculty = (Faculty) o;
+        return id == faculty.id && Objects.equals(name, faculty.name) && Objects.equals(color, faculty.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, namr, color);
+        return Objects.hash(id, name, color);
     }
 }

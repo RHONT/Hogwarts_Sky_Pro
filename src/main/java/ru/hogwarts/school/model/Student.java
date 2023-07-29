@@ -4,12 +4,12 @@ import java.util.Objects;
 
 public class Student {
     private long id;
-    private String namr;
+    private String name;
     private Integer age;
 
-    public Student(long id, String namr, Integer age) {
+    public Student(long id, String name, Integer age) {
         this.id = id;
-        this.namr = namr;
+        this.name = name;
         this.age = age;
     }
 
@@ -21,12 +21,12 @@ public class Student {
         this.id = id;
     }
 
-    public String getNamr() {
-        return namr;
+    public String getName() {
+        return name;
     }
 
-    public void setNamr(String namr) {
-        this.namr = namr;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getAge() {
@@ -42,11 +42,11 @@ public class Student {
         if (this == o) return true;
         if (!(o instanceof Student)) return false;
         Student student = (Student) o;
-        return id == student.id && Objects.equals(namr, student.namr) && Objects.equals(age, student.age);
+        return id == student.id && Objects.equals(name, student.name) && Objects.equals(age, student.age);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, namr, age);
+        return Objects.hash(id, name, age);
     }
 }
