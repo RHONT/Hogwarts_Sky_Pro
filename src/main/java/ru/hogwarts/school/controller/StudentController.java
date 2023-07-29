@@ -33,12 +33,17 @@ public class StudentController {
     }
 
     @PutMapping
-    public ResponseEntity<Student> update(@RequestBody Student student){
+    public ResponseEntity<Student> update(@RequestBody Student student) {
         return ResponseEntity.ok(studentServices.update(student));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Student> remove(@PathVariable long id) {
         return ResponseEntity.ok(studentServices.remove(id));
+    }
+
+    @GetMapping("/filter-age/{age}")
+    public List<Student> filterByAge(@PathVariable Integer age) {
+        return studentServices.filterByAge(age);
     }
 }

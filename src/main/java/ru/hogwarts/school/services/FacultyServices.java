@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FacultyServices {
@@ -56,6 +57,10 @@ public class FacultyServices {
             return faculty;
         }
         throw new NotFoundFaculty("Нет такого faculty");
+    }
+
+    public List<Faculty> filterByColor(String color) {
+        return storageFaculty.values().stream().filter(e -> e.getColor().equals(color)).collect(Collectors.toList());
     }
 
 }

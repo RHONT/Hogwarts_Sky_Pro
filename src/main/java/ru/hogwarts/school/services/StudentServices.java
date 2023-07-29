@@ -2,10 +2,12 @@ package ru.hogwarts.school.services;
 
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.ExceptionHandler.NotFoundStudent;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServices {
@@ -54,6 +56,10 @@ public class StudentServices {
             return student;
         }
         throw new NotFoundStudent("Нет такого студента");
+    }
+
+    public List<Student> filterByAge(Integer age) {
+        return storageStudent.values().stream().filter(e -> Objects.equals(e.getAge(), age)).collect(Collectors.toList());
     }
 
 }
