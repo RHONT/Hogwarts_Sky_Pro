@@ -3,73 +3,80 @@ package ru.hogwarts.school.services;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import ru.hogwarts.school.ExceptionHandler.NotFoundFaculty;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.repository.FacultyRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
-
+@ExtendWith(MockitoExtension.class)
 class FacultyServicesTest {
-//
-//    private FacultyServices facultyServices;
-//
-//    private final Faculty test1 = new Faculty(0, "Test", "Blue");
-//    private final Faculty test2 = new Faculty(0, "Test2", "Green");
-//
-//    @BeforeEach
-//    void init() {
-//        facultyServices = new FacultyServices();
-//    }
-//
-//    @Test
-//    void add() {
-//        int currentSize = facultyServices.getAllStudent().size();
-//        facultyServices.add(test1);
-//        assertEquals(++currentSize, facultyServices.getAllStudent().size());
-//    }
-//
-//    @Test
-//    void remove() {
-//        facultyServices.add(test1);
-//        facultyServices.add(test2);
-//        facultyServices.remove(1);
-//        assertEquals(1, facultyServices.getAllStudent().size());
-//    }
-//
-//    @Test
-//    void remove_throwsNotFaculty() {
-//        facultyServices.add(test1);
-//        facultyServices.add(test2);
-//        assertThrows(NotFoundFaculty.class, () -> facultyServices.remove(100));
-//    }
-//
-//    @Test
-//    void get() {
-//        facultyServices.add(test1);
-//        facultyServices.add(test2);
-//        int currentSize = facultyServices.getAllStudent().size();
-//
-//        assertEquals(test2, facultyServices.get(test2.getId()));
-//    }
-//
-//    @Test
-//    void get_throwsNotFaculty() {
-//        assertThrows(NotFoundFaculty.class, () -> facultyServices.get(100));
-//    }
-//
-//
-//    @Test
-//    void update() {
-//        Faculty faculty = facultyServices.add(test1);
-//        Faculty faculty1Change = new Faculty(faculty.getId(), "1", "2");
-//        assertEquals(faculty1Change, facultyServices.update(faculty1Change));
-//
-//    }
-//
-//    @Test
-//    void filterByColor() {
-//        facultyServices.add(test1);
-//        facultyServices.add(test2);
-//        assertEquals(test1, facultyServices.filterByColor(test1.getColor()).get(0));
-//    }
+    @Mock
+    private FacultyRepository facultyRepository;
+
+    @InjectMocks
+    private FacultyServices facultyServices;
+
+    private final Faculty testBlue = new Faculty(0L, "Test", "Blue");
+    private final Faculty testGreen_1 = new Faculty(1L, "Test2", "Green");
+    private final Faculty testGreen_2 = new Faculty(2L, "Test3", "Green");
+
+
+    @Test
+    void add() {
+        when(facultyRepository.save(testBlue)).thenReturn(testBlue);
+        assertEquals(testBlue, facultyServices.add(testBlue));
+    }
+
+    @Test
+    void remove() {
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(testBlue));
+        assertEquals(testBlue, facultyServices.remove(1L));
+    }
+
+    @Test
+    void remove_throwsNotFaculty() {
+
+        assertThrows(NotFoundFaculty.class, () -> facultyServices.remove(100L));
+    }
+
+    @Test
+    void get() {
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(testBlue));
+
+        assertEquals(testBlue, facultyServices.get(1L));
+    }
+
+    @Test
+    void get_throwsNotFaculty() {
+        assertThrows(NotFoundFaculty.class, () -> facultyServices.get(100L));
+    }
+
+
+    @Test
+    void update() {
+        testGreen_1.setId(1L);
+        testBlue.setId(1L);
+
+        when(facultyRepository.findById(1L)).thenReturn(Optional.of(testBlue));
+        when(facultyRepository.save(eq(testGreen_1))).thenReturn(testGreen_1);
+        assertEquals(testGreen_1, facultyServices.update(testGreen_1));
+
+    }
+
+    @Test
+    void filterByColor() {
+        when(facultyRepository.findFacultyByColor("Green")).thenReturn(new ArrayList<>(List.of(testGreen_1, testGreen_2)));
+        assertEquals(2, facultyServices.filterByColor("Green").size());
+    }
 }
