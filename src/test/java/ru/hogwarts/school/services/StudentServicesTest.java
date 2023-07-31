@@ -22,6 +22,7 @@ class StudentServicesTest {
 
     private final Student testStud_1 = new Student(0L, "test", 10);
     private final Student testStud_2 = new Student(0L, "test_2", 50);
+    private final Student testStud_3 = new Student(0L, "test_3", 50);
 
     @Mock
     private StudentRepository studentRepository;
@@ -59,20 +60,19 @@ class StudentServicesTest {
         assertThrows(NotFoundStudent.class, () -> studentServices.get(100L));
     }
 
-    // не понимаю как этот тест делать.
     @Test
     void update() {
-//        testStud_2.setId(1L);
-//        when(studentRepository.save(testStud_1)).thenReturn(testStud_1);
-//        when(studentRepository.findById(testStud_1.getId())).thenReturn(Optional.of(testStud_1));
-//        assertEquals(testStud_1, studentServices.update(testStud_1));
+        testStud_2.setId(1L);
+        testStud_1.setId(1L);
 
+        when(studentRepository.findById(1L)).thenReturn(Optional.of(testStud_1));
+        when(studentRepository.save(eq(testStud_2))).thenReturn(testStud_2);
+        assertEquals(testStud_2, studentServices.update(testStud_2));
     }
-//
-//   Тоже не понимаю как...
-//    @Test
-//    void filterByAge() {
-//        when(studentRepository.findAll()).thenReturn(new ArrayList<>(List.of(testStud_1, testStud_2)));
-//        assertEquals(testStud_1, studentServices.filterByAge(0).get(0));
-//    }
+
+    @Test
+    void filterByAge() {
+        when(studentRepository.findStudentByAge(50)).thenReturn(new ArrayList<>(List.of(testStud_2, testStud_3)));
+        assertEquals(2, studentServices.filterByAge(50).size());
+    }
 }
