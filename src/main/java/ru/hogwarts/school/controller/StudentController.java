@@ -46,4 +46,9 @@ public class StudentController {
     public List<Student> filterByAge(@PathVariable Integer age) {
         return studentServices.filterByAge(age);
     }
+
+    @GetMapping("/filter-age-between/{min},{max}")
+    public List<Student> filterByAgeBetween(@PathVariable Integer min, @PathVariable Integer max) {
+        return studentServices.filterByAgeBetween(min, max);
+    }
 }
