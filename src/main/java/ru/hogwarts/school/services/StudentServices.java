@@ -32,13 +32,13 @@ public class StudentServices {
 //    }
 
     public Student remove(Long id) {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new NotFoundStudent("Нет такого студента"));
+        Student student = studentRepository.findById(id).orElseThrow(() -> new NotFoundStudent("Нет такого студента с id " + id));
         studentRepository.deleteById(id);
         return student;
     }
 
     public Student get(Long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new NotFoundStudent("Нет такого студента"));
+        return studentRepository.findById(id).orElseThrow(() -> new NotFoundStudent("Нет такого студента с id " + id));
     }
 
     public List<Student> getAllStudent() {
@@ -46,7 +46,7 @@ public class StudentServices {
     }
 
     public Student update(Student student) {
-        Student studentFind = studentRepository.findById(student.getId()).orElseThrow(() -> new NotFoundStudent("Нет такого студента"));
+        Student studentFind = studentRepository.findById(student.getId()).orElseThrow(() -> new NotFoundStudent("Нет такого студента : " + student));
         return studentRepository.save(student);
     }
 
