@@ -3,6 +3,7 @@ package ru.hogwarts.school.services;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.ExceptionHandler.NotFoundFaculty;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.*;
@@ -57,6 +58,11 @@ public class FacultyServices {
         Set<Faculty> setByName = new HashSet<>(filterByNameIgnoreCase(strSearch));
         setByName.addAll(filterByColorIgnoreCase(strSearch));
         return setByName;
+    }
+
+    public Collection<Student> getAllStudentOfSelectedFaculty(Long id) {
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new NotFoundFaculty("Факультет с id " + id + " не найден"));
+        return faculty.getStudents();
     }
 
 
