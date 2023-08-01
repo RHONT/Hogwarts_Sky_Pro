@@ -75,4 +75,13 @@ class StudentServicesTest {
         when(studentRepository.findStudentByAge(50)).thenReturn(new ArrayList<>(List.of(testStud_2, testStud_3)));
         assertEquals(2, studentServices.filterByAge(50).size());
     }
+
+
+    // не понимаю есть ли смысл в моем тесте
+    // обозначаю поведение и тут же выкидываю готовый результат.
+    @Test
+    void filterByAgeBetween() {
+        when(studentRepository.findByAgeBetween(9, 20)).thenReturn(new ArrayList<>(List.of(testStud_1)));
+        assertEquals(1, studentServices.filterByAgeBetween(9, 20).size());
+    }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -78,4 +79,14 @@ class FacultyServicesTest {
         when(facultyRepository.findFacultyByColor("Green")).thenReturn(new ArrayList<>(List.of(testGreen_1, testGreen_2)));
         assertEquals(2, facultyServices.filterByColor("Green").size());
     }
+
+    // надо подумать как протестировать грамотно этот кейс
+    @Test
+    void filterByColorOrName() {
+        when(facultyRepository.findByColorContainsIgnoreCase(any())).thenReturn(new ArrayList<>(List.of(testGreen_2, testGreen_1)));
+        when(facultyRepository.findByNameContainsIgnoreCase(any())).thenReturn(new ArrayList<>(List.of(testBlue)));
+        assertEquals(3, facultyServices.filterByColorOrName("z").size());
+    }
+
+
 }

@@ -45,11 +45,11 @@ public class FacultyServices {
         return facultyRepository.findFacultyByColor(color);
     }
 
-    private List<Faculty> filterByColorIgnoreCase(String color) {
+    public List<Faculty> filterByColorIgnoreCase(String color) {
         return facultyRepository.findByColorContainsIgnoreCase(color);
     }
 
-    private List<Faculty> filterByNameIgnoreCase(String name) {
+    public List<Faculty> filterByNameIgnoreCase(String name) {
         return facultyRepository.findByNameContainsIgnoreCase(name);
     }
 
