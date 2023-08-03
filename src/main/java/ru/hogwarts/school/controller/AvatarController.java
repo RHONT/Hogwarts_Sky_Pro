@@ -29,6 +29,10 @@ public class AvatarController {
     // Post принимает извне некий медиафайл.
     @PostMapping(value = "/{studentId}/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadAvatar(@PathVariable Long studentId, @RequestParam MultipartFile avatar) throws IOException {
+        if (avatar.getSize() > 1024 * 1024) {
+            return ResponseEntity.badRequest().body("File is too big");
+        }
+        
         avatarService.uploadAvatar(studentId, avatar);
         return ResponseEntity.ok().build();
     }

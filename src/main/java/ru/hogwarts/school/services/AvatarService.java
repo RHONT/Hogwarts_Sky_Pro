@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import ru.hogwarts.school.constants.ViewSelect;
+import ru.hogwarts.school.exceptionHandler.IllegalFormatContentException;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
@@ -13,6 +15,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -35,7 +38,11 @@ public class AvatarService {
         Student student = studentRepository.
                 findById(studentId).
                 orElseThrow(() -> new NotFoundStudentException("Студента с id " + studentId + " не существует"));
-        Path pathFile = Path.of(avatarsDir, student.getName() + "." + avatarFile.getOriginalFilename().substring(avatarFile.getOriginalFilename().lastIndexOf(".") + 1));
+        String extension = getExtension(Objects.requireNonNull(avatarFile.getOriginalFilename()));
+        if (!ViewSelect.onlyImage(extension)) {
+            throw new IllegalFormatContentException(extension);
+        }
+        Path pathFile = Path.of(avatarsDir, student.getName() + "." + extension);
         // abc/abc/test.text :: getParent - > abc/abc/
         // createDirectories - создает директории если их нет.
         Files.createDirectories(pathFile.getParent());
@@ -62,8 +69,13 @@ public class AvatarService {
         avatarRepository.save(avatar);
     }
 
+
     public Avatar findAvatar(Long student_id) {
         return avatarRepository.findByStudentId(student_id).orElse(null);
+    }
+
+    private String getExtension(String fileName) {
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
     }
 
 
