@@ -10,7 +10,12 @@ import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.services.AvatarService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RestController
 public class AvatarController {
@@ -39,5 +44,22 @@ public class AvatarController {
         headers.setContentType(MediaType.parseMediaType(avatar.getMediaType()));
         headers.setContentLength(avatar.getData().length);
         return ResponseEntity.status(HttpStatus.OK).headers(headers).body(avatar.getData());
+    }
+
+    @GetMapping("/{studentId}/get-from-local-avatar")
+    public void getAvatarFromLocal(@PathVariable Long studentId, HttpServletResponse response) throws IOException {
+        Avatar avatar = avatarService.findAvatar(studentId);
+        if (avatar == null) {
+            throw new NotFoundStudentException("Студента с id " + studentId + " не существет");
+        }
+        Path path = Path.of(avatar.getFilePath());
+        try (
+                InputStream is = Files.newInputStream(path);
+                OutputStream os = response.getOutputStream();) {
+            response.setStatus(200);
+            response.setContentType(avatar.getMediaType());
+            response.setContentLength((int) avatar.getFileSize());
+            is.transferTo(os);
+        }
     }
 }
