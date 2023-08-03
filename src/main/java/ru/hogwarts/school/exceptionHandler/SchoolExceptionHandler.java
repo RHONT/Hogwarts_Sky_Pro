@@ -1,4 +1,4 @@
-package ru.hogwarts.school.ExceptionHandler;
+package ru.hogwarts.school.exceptionHandler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class SchoolExceptionHandler {
 
-    @ExceptionHandler({NotFoundStudent.class,NotFoundFaculty.class})
-    public ResponseEntity<String> NotFound(Exception exception){
+    @ExceptionHandler({NotFoundStudentException.class, NotFoundFacultyException.class})
+    public ResponseEntity<String> NotFound(Exception exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

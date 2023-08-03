@@ -1,5 +1,6 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -13,9 +14,9 @@ public class Student {
     private String name;
     private Integer age;
 
-    @JsonIgnoreProperties(value = {"students"})
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "faculty_id")
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "faculty_id", nullable = true)
     private Faculty faculty;
 
     public Student() {
@@ -66,27 +67,6 @@ public class Student {
         this.faculty = faculty;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (!(o instanceof Student)) return false;
-//        Student student = (Student) o;
-//        return id == student.id && Objects.equals(name, student.name) && Objects.equals(age, student.age);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, name, age);
-//    }
-
-//    @Override
-//    public String toString() {
-//        return "Student{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", age=" + age +
-//                '}';
-//    }
 
     @Override
     public String toString() {

@@ -1,7 +1,7 @@
 package ru.hogwarts.school.services;
 
 import org.springframework.stereotype.Service;
-import ru.hogwarts.school.ExceptionHandler.NotFoundFaculty;
+import ru.hogwarts.school.exceptionHandler.NotFoundFacultyException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -23,13 +23,13 @@ public class FacultyServices {
 
     public Faculty remove(long id) {
 
-        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new NotFoundFaculty("Нет такого факультета"));
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new NotFoundFacultyException("Нет такого факультета"));
         facultyRepository.deleteById(id);
         return faculty;
     }
 
     public Faculty get(long id) {
-        return facultyRepository.findById(id).orElseThrow(() -> new NotFoundFaculty("Нет такого факультета"));
+        return facultyRepository.findById(id).orElseThrow(() -> new NotFoundFacultyException("Нет такого факультета"));
     }
 
     public List<Faculty> getAllStudent() {
@@ -38,7 +38,7 @@ public class FacultyServices {
 
     public Faculty update(Faculty faculty) {
 
-        facultyRepository.findById(faculty.getId()).orElseThrow(() -> new NotFoundFaculty("Нет такого факультета"));
+        facultyRepository.findById(faculty.getId()).orElseThrow(() -> new NotFoundFacultyException("Нет такого факультета"));
         return facultyRepository.save(faculty);
     }
 
@@ -46,23 +46,18 @@ public class FacultyServices {
         return facultyRepository.findFacultyByColor(color);
     }
 
-    public List<Faculty> filterByColorIgnoreCase(String color) {
-        return facultyRepository.findByColorContainsIgnoreCase(color);
-    }
-
-    public List<Faculty> filterByNameIgnoreCase(String name) {
-        return facultyRepository.findByNameContainsIgnoreCase(name);
-    }
-
-    public Collection<Faculty> filterByColorOrName(String strSearch) {
-        Set<Faculty> setByName = new HashSet<>(filterByNameIgnoreCase(strSearch));
-        setByName.addAll(filterByColorIgnoreCase(strSearch));
-        return setByName;
-    }
 
     public Collection<Student> getAllStudentOfSelectedFaculty(Long id) {
-        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new NotFoundFaculty("Факультет с id " + id + " не найден"));
+        Faculty faculty = facultyRepository.findById(id).orElseThrow(() -> new NotFoundFacultyException("Факультет с id " + id + " не найден"));
         return faculty.getStudents();
+    }
+
+    public Collection<Faculty> filterByColorOrName(String search) {
+        return filterByColorOrNameTwoParams(search, search);
+    }
+
+    public Collection<Faculty> filterByColorOrNameTwoParams(String name, String color) {
+        return facultyRepository.findByColorContainsOrNameContains(name, color);
     }
 
 

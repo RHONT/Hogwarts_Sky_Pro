@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.hogwarts.school.ExceptionHandler.NotFoundStudent;
+import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
 
@@ -45,7 +45,7 @@ class StudentServicesTest {
     @Test
     void remove_throwsNotStudent() {
 
-        assertThrows(NotFoundStudent.class, () -> studentServices.remove(100L));
+        assertThrows(NotFoundStudentException.class, () -> studentServices.remove(100L));
     }
 
     @Test
@@ -57,7 +57,7 @@ class StudentServicesTest {
 
     @Test
     void get_throwsNotStudent() {
-        assertThrows(NotFoundStudent.class, () -> studentServices.get(100L));
+        assertThrows(NotFoundStudentException.class, () -> studentServices.get(100L));
     }
 
     @Test

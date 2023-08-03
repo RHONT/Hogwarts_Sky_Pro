@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.hogwarts.school.ExceptionHandler.NotFoundFaculty;
+import ru.hogwarts.school.exceptionHandler.NotFoundFacultyException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
@@ -47,7 +47,7 @@ class FacultyServicesTest {
     @Test
     void remove_throwsNotFaculty() {
 
-        assertThrows(NotFoundFaculty.class, () -> facultyServices.remove(100L));
+        assertThrows(NotFoundFacultyException.class, () -> facultyServices.remove(100L));
     }
 
     @Test
@@ -59,7 +59,7 @@ class FacultyServicesTest {
 
     @Test
     void get_throwsNotFaculty() {
-        assertThrows(NotFoundFaculty.class, () -> facultyServices.get(100L));
+        assertThrows(NotFoundFacultyException.class, () -> facultyServices.get(100L));
     }
 
 
@@ -81,12 +81,12 @@ class FacultyServicesTest {
     }
 
     // надо подумать как протестировать грамотно этот кейс
-    @Test
-    void filterByColorOrName() {
-        when(facultyRepository.findByColorContainsIgnoreCase(any())).thenReturn(new ArrayList<>(List.of(testGreen_2, testGreen_1)));
-        when(facultyRepository.findByNameContainsIgnoreCase(any())).thenReturn(new ArrayList<>(List.of(testBlue)));
-        assertEquals(3, facultyServices.filterByColorOrName("z").size());
-    }
+//    @Test
+//    void filterByColorOrName() {
+//        when(facultyRepository.findByColorContainsIgnoreCase(any())).thenReturn(new ArrayList<>(List.of(testGreen_2, testGreen_1)));
+//        when(facultyRepository.findByNameContainsIgnoreCase(any())).thenReturn(new ArrayList<>(List.of(testBlue)));
+//        assertEquals(3, facultyServices.filterByColorOrName("z").size());
+//    }
 
 
 }

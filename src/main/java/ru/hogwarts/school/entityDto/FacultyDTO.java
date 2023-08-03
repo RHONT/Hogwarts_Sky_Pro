@@ -1,39 +1,23 @@
-package ru.hogwarts.school.model;
+package ru.hogwarts.school.entityDto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.*;
-import java.util.List;
+import ru.hogwarts.school.model.Faculty;
+
 import java.util.Objects;
 
-@Entity
-public class Faculty {
-    @Id
-    @GeneratedValue
+
+public class FacultyDTO {
     private Long id;
     private String name;
     private String color;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "faculty")
-    private List<Student> students;
 
-    public Faculty() {
+    public FacultyDTO(Faculty faculty) {
+        id = faculty.getId();
+        name = faculty.getName();
+        color = faculty.getColor();
     }
 
-    public Faculty(Long id, String name, String color, List<Student> students) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-        this.students = students;
-    }
-
-    public Faculty(Long id, String name, String color) {
-        this.id = id;
-        this.name = name;
-        this.color = color;
-    }
 
     public Long getId() {
         return id;
@@ -59,19 +43,11 @@ public class Faculty {
         this.color = color;
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Faculty)) return false;
-        Faculty faculty = (Faculty) o;
+        if (!(o instanceof FacultyDTO)) return false;
+        FacultyDTO faculty = (FacultyDTO) o;
         return id == faculty.id && Objects.equals(name, faculty.name) && Objects.equals(color, faculty.color);
     }
 
