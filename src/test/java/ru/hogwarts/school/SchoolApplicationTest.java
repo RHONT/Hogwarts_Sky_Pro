@@ -7,22 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.event.annotation.BeforeTestClass;
-import org.springframework.test.context.event.annotation.BeforeTestMethod;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.controller.StudentController;
-import ru.hogwarts.school.entityDto.FacultyDTO;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
 import ru.hogwarts.school.model.Student;
-import ru.hogwarts.school.repository.StudentRepository;
-import ru.hogwarts.school.services.StudentServices;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -106,7 +94,8 @@ public class SchoolApplicationTest {
 
     @Test
     void getFacultyStudentToDTO() {
-
+        Student student = studentController.getByName("Разин Венерзенович").getBody();
+        Assertions.assertThat(restTemplate.getForObject("http://localhost:" + port + "/student/find-faqulty-dto/" + student.getId(), String.class)).contains("reduce");
     }
 
 
