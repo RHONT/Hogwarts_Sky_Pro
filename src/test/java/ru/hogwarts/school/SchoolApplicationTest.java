@@ -51,14 +51,23 @@ public class SchoolApplicationTest {
         Assertions.assertThat(studentController).isNotNull();
         Assertions.assertThat(facultyController).isNotNull();
 
-        Assertions.assertThat(restTemplate.postForObject("http://localhost:" + port + "/student/", studentForAdd, String.class)).isNotNull();
-        Assertions.assertThat(restTemplate.postForObject("http://localhost:" + port + "/student/", studentForDelete, String.class)).isNotNull();
-        Assertions.assertThat(restTemplate.postForObject("http://localhost:" + port + "/student/", studentForUpdate, String.class)).isNotNull();
+        Student studentAdd = studentController.getByName("add").getBody();
+        Student studentDel = studentController.getByName("delete").getBody();
+        Student studentUp = studentController.getByName("update").getBody();
+
+        if (studentAdd == null) {
+            Assertions.assertThat(restTemplate.postForObject("http://localhost:" + port + "/student/", studentForAdd, String.class)).isNotNull();
+        }
+        if (studentUp == null) {
+            Assertions.assertThat(restTemplate.postForObject("http://localhost:" + port + "/student/", studentForUpdate, String.class)).isNotNull();
+        }
+        if (studentDel == null) {
+            Assertions.assertThat(restTemplate.postForObject("http://localhost:" + port + "/student/", studentForDelete, String.class)).isNotNull();
+        }
     }
 
 
     @Test
-    @Order(2)
     void StudentControllerGet() {
         Student student = studentController.getByName("add").getBody();
         Assertions.assertThat(restTemplate.getForObject("http://localhost:" + port + "/student/" + student.getId(), String.class)).contains("add");
@@ -66,13 +75,11 @@ public class SchoolApplicationTest {
     }
 
     @Test
-    @Order(3)
     void StudentControllerGetAllStudent() {
         Assertions.assertThat(restTemplate.getForObject("http://localhost:" + port + "/student/", String.class)).isNotNull();
     }
 
     @Test
-    @Order(4)
     void StudentControllerUpdate() {
         Student student = studentController.getByName("update").getBody();
         student.setAge(200);
@@ -80,7 +87,6 @@ public class SchoolApplicationTest {
     }
 
     @Test
-    @Order(5)
     void StudentControllerRemove() {
         Student student = studentController.getByName("delete").getBody();
         restTemplate.delete("http://localhost:" + port + "/student/" + student.getId());
@@ -89,20 +95,16 @@ public class SchoolApplicationTest {
 
 
     @Test
-    @Order(7)
     void publicFilterByAge() {
-
-
+        Assertions.assertThat(restTemplate.getForObject("http://localhost:" + port + "/student/filter-age/25", String.class)).isNotNull();
     }
 
     @Test
-    @Order(6)
     void filterByAgeBetween() {
-        Assertions.assertThat(restTemplate.getForObject("http://localhost:" + port + "/student/" + "/filter-age/" + "25", String.class)).isNotNull();
+        Assertions.assertThat(restTemplate.getForObject("http://localhost:" + port + "/student/filter-age-between/0,30", String.class)).contains("add");
     }
 
     @Test
-    @Order(8)
     void getFacultyStudentToDTO() {
 
     }
