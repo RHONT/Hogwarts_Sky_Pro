@@ -28,6 +28,11 @@ public class StudentController {
         return ResponseEntity.ok(studentServices.get(id));
     }
 
+    @GetMapping("getByName/{name}")
+    public ResponseEntity<Student> getByName(@PathVariable String name) {
+        return ResponseEntity.ok(studentServices.getStudentByName(name));
+    }
+
     @GetMapping
     public List<Student> getAllStudent() {
         return studentServices.getAllStudent();
@@ -57,4 +62,6 @@ public class StudentController {
     public FacultyDTO getFacultyStudentToDTO(@PathVariable Long id_student) {
         return studentServices.getFacultyStudentToDTO(id_student);
     }
+
+
 }

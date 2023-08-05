@@ -1,5 +1,6 @@
 package ru.hogwarts.school.services;
 
+import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
 import ru.hogwarts.school.entityDto.FacultyDTO;
@@ -26,7 +27,7 @@ public class StudentServices {
     }
 
     public Student remove(Long id) {
-        Student student = studentRepository.findById(id).orElseThrow(() -> new NotFoundStudentException("Нет такого студента с id " + id));
+        Student student = studentRepository.findById(id).orElse(null);
         studentRepository.deleteById(id);
         return student;
     }
@@ -56,5 +57,11 @@ public class StudentServices {
         Student student = studentRepository.findById(student_id).orElseThrow(() -> new NotFoundStudentException("Студент с id " + student_id + " не найден"));
         return new FacultyDTO(student.getFaculty());
     }
+
+    public Student getStudentByName(String name) {
+
+        return studentRepository.findStudentByName(name).orElse(null);
+    }
+
 
 }
