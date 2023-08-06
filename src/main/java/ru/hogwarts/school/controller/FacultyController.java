@@ -56,7 +56,7 @@ public class FacultyController {
     }
 
     @GetMapping("/get-all-student-by-id-faculty/{id_faculty}")
-    public Collection<Student> filterByColorOrName(@PathVariable Long id_faculty) {
+    public Collection<Student> getAllStudentByFacultyId(@PathVariable Long id_faculty) {
         return facultyServices.getAllStudentOfSelectedFaculty(id_faculty);
     }
 

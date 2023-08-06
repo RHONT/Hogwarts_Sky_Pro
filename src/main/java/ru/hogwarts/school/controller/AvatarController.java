@@ -32,7 +32,7 @@ public class AvatarController {
         if (avatar.getSize() > 1024 * 1024) {
             return ResponseEntity.badRequest().body("File is too big");
         }
-        
+
         avatarService.uploadAvatar(studentId, avatar);
         return ResponseEntity.ok().build();
     }
@@ -62,7 +62,8 @@ public class AvatarController {
                 OutputStream os = response.getOutputStream();) {
             response.setStatus(200);
             response.setContentType(avatar.getMediaType());
-            response.setContentLength((int) avatar.getFileSize());
+//            response.setContentLength((int) avatar.getFileSize());
+            response.setHeader("Content-Length", String.valueOf(avatar.getFileSize()));
             is.transferTo(os);
         }
     }
