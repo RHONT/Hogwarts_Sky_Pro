@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -312,8 +313,22 @@ public class SchoolApplicationWithMockTest {
     }
 
     @Test
-    void filterByColorOrNameFaculty() {
-        
+    void filterByColorOrNameFaculty() throws Exception {
+        List<Faculty> list = new ArrayList<>(List.of(
+                new Faculty(1L, "red", "green"),
+                new Faculty(2L, "yellow", "red"),
+                new Faculty(3L, "3", "red")
+        ));
+
+        when(facultyRepository.findByColorContainsOrNameContains(anyString(), anyString())).thenReturn(list);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/faculty/filter-color-or-name/red")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(list.size()));
+
+
     }
 
     @Test
