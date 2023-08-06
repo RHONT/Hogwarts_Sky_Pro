@@ -1,6 +1,5 @@
 package ru.hogwarts.school;
 
-
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -99,10 +97,7 @@ public class SchoolApplicationTest {
             if (facultytDel == null) {
                 Assertions.assertThat(restTemplate.postForObject(beginFaculty, facultyForDelete, String.class)).isNotNull();
             }
-
-
         }
-
     }
 
 
@@ -110,15 +105,12 @@ public class SchoolApplicationTest {
     void StudentControllerGet() {
         Student student = studentController.getByName("add").getBody();
         Assertions.assertThat(restTemplate.getForObject(beginStud + student.getId(), String.class)).contains("add");
-
     }
 
     @Test
     void StudentControllerGetAllStudent() {
         List<Student> list = restTemplate.getForObject(beginStud, List.class);
         assertFalse(list.isEmpty());
-
-
     }
 
     //поправить
@@ -140,8 +132,6 @@ public class SchoolApplicationTest {
         restTemplate.delete(beginStud + student.getId());
 
         assertThrows(NotFoundStudentException.class, () -> studentController.get(student.getId()));
-
-
     }
 
     @Test
@@ -176,7 +166,6 @@ public class SchoolApplicationTest {
         if (faculty != null) {
             Assertions.assertThat(restTemplate.getForObject(beginFaculty + faculty.getId(), String.class)).contains("add");
         }
-
     }
 
     @Test
@@ -239,9 +228,5 @@ public class SchoolApplicationTest {
 
         List<Student> list = restTemplate.getForObject(beginFaculty + "get-all-student-by-id-faculty/" + faculty.getId(), List.class);
         assertEquals(amountStudent, list.size());
-
-
     }
-
-
 }
