@@ -1,8 +1,10 @@
 package ru.hogwarts.school;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts.school.controller.AvatarController;
 import ru.hogwarts.school.controller.FacultyController;
@@ -31,8 +34,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -212,6 +216,45 @@ public class SchoolApplicationWithMockTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(list.size()));
     }
+
+    @Test
+    void getFiveLastIdStudent() throws Exception {
+        List<Student> list = new ArrayList<>(List.of(
+                new Student(1L, "1", 1),
+                new Student(2L, "2", 1),
+                new Student(3L, "3", 1),
+                new Student(4L, "4", 1),
+                new Student(5L, "3", 1)
+        ));
+        when(studentRepository.getFiveLastIdStudent()).thenReturn(list);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/get-five-last-student")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+        assertEquals(result.getResponse().getContentAsString(), new ObjectMapper().writeValueAsString(list));
+
+    }
+
+    @Test
+    void getAVGAeStudent() throws Exception {
+        when(studentRepository.getAVGAgeStudent()).thenReturn(4.2f);
+        String result = mockMvc.perform(MockMvcRequestBuilders
+                .get("/student/get-avg-age-student")).andReturn().getResponse().getContentAsString();
+        assertEquals("4.2", result);
+    }
+
+
+    @Test
+    void getAmountStudent() throws Exception {
+        when(studentRepository.getAllAmountStudents()).thenReturn(25);
+        String result = mockMvc.perform(MockMvcRequestBuilders
+                        .get("/student/get-amount-student"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse()
+                .getContentAsString();
+        assertEquals("25", result);
+    }
+
 
     @Test
     void getFacultyStudentToDTOStudent() throws Exception {
