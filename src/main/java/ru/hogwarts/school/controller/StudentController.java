@@ -2,6 +2,7 @@ package ru.hogwarts.school.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.entityDto.FacultyDTO;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.services.StudentServices;
 
@@ -27,6 +28,11 @@ public class StudentController {
         return ResponseEntity.ok(studentServices.get(id));
     }
 
+    @GetMapping("getByName/{name}")
+    public ResponseEntity<Student> getByName(@PathVariable String name) {
+        return ResponseEntity.ok(studentServices.getStudentByName(name));
+    }
+
     @GetMapping
     public List<Student> getAllStudent() {
         return studentServices.getAllStudent();
@@ -46,4 +52,16 @@ public class StudentController {
     public List<Student> filterByAge(@PathVariable Integer age) {
         return studentServices.filterByAge(age);
     }
+
+    @GetMapping("/filter-age-between/{min},{max}")
+    public List<Student> filterByAgeBetween(@PathVariable Integer min, @PathVariable Integer max) {
+        return studentServices.filterByAgeBetween(min, max);
+    }
+
+    @GetMapping("/find-faqulty-dto/{id_student}")
+    public FacultyDTO getFacultyStudentToDTO(@PathVariable Long id_student) {
+        return studentServices.getFacultyStudentToDTO(id_student);
+    }
+
+
 }

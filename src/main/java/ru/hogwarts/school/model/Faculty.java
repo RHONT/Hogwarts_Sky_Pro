@@ -1,23 +1,50 @@
 package ru.hogwarts.school.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Faculty {
-    private long id;
+    @Id
+    @GeneratedValue
+    private Long id;
     private String name;
     private String color;
 
-    public Faculty(long id, String namr, String color) {
+    @JsonIgnore
+    @OneToMany(mappedBy = "faculty")
+    private List<Student> students;
+
+    public Faculty() {
+    }
+
+    public Faculty(Long id, String name, String color, List<Student> students) {
         this.id = id;
-        this.name = namr;
+        this.name = name;
+        this.color = color;
+        this.students = students;
+    }
+
+    public Faculty(Long id, String name, String color) {
+        this.id = id;
+        this.name = name;
         this.color = color;
     }
 
-    public long getId() {
+    public Faculty(String name, String color) {
+        this.name = name;
+        this.color = color;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,6 +64,14 @@ public class Faculty {
         this.color = color;
     }
 
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -48,5 +83,14 @@ public class Faculty {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, color);
+    }
+
+    @Override
+    public String toString() {
+        return "Faculty{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", color='" + color + '\'' +
+                '}';
     }
 }
