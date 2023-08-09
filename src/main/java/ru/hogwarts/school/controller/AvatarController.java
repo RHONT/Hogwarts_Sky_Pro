@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
 import ru.hogwarts.school.model.Avatar;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.services.AvatarService;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 @RestController
 public class AvatarController {
@@ -24,6 +26,13 @@ public class AvatarController {
 
     public AvatarController(AvatarService avatarService) {
         this.avatarService = avatarService;
+    }
+
+    @GetMapping("/page-avatar")
+    public List<Avatar> getPageAvatar(@RequestParam(name = "page") Integer pageNumber,
+                                      @RequestParam(name = "size") Integer size) {
+
+        return avatarService.getPage(pageNumber, size);
     }
 
     // Post принимает извне некий медиафайл.

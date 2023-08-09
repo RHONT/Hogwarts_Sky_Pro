@@ -63,5 +63,20 @@ public class StudentController {
         return studentServices.getFacultyStudentToDTO(id_student);
     }
 
+    @GetMapping("/get-amount-student")
+    public Integer getAmountStudent() {
+        return studentServices.getAmountStudent();
+    }
+
+    @GetMapping("/get-avg-age-student")
+    public Float getAVGAeStudent() {
+        return studentServices.getAVGAeStudent();
+    }
+
+    @GetMapping("/get-five-last-student")
+    public List<Student> getFiveLastIdStudent() {
+        return studentServices.getFiveLastIdStudent();
+    }
+
 
 }

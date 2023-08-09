@@ -1,12 +1,14 @@
 package ru.hogwarts.school.services;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import ru.hogwarts.school.constants.ViewSelect;
 import ru.hogwarts.school.exceptionHandler.IllegalFormatContentException;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
+import ru.hogwarts.school.exceptionHandler.PageErrorInputException;
 import ru.hogwarts.school.model.Avatar;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.AvatarRepository;
@@ -15,6 +17,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Objects;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
@@ -79,4 +82,11 @@ public class AvatarService {
     }
 
 
+    public List<Avatar> getPage(Integer pageNumber, Integer size) {
+        if (pageNumber < 1 || size < 1) {
+            throw new PageErrorInputException("input incorrect number and size of page.");
+        }
+        PageRequest pageRequest = PageRequest.of(pageNumber - 1, size);
+        return avatarRepository.findAll(pageRequest).getContent();
+    }
 }

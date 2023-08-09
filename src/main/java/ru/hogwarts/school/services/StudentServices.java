@@ -63,5 +63,17 @@ public class StudentServices {
         return studentRepository.findStudentByName(name).orElse(null);
     }
 
+    public Integer getAmountStudent() {
+        return studentRepository.getAllAmountStudents();
+    }
+
+    public Float getAVGAeStudent() {
+        return studentRepository.getAVGAgeStudent();
+    }
+
+    public List<Student> getFiveLastIdStudent() {
+        return studentRepository.getFiveLastIdStudent();
+    }
+
 
 }
