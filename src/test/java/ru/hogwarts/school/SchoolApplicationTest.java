@@ -233,4 +233,12 @@ public class SchoolApplicationTest {
         List<Student> list = restTemplate.getForObject(beginFaculty + "get-all-student-by-id-faculty/" + faculty.getId(), List.class);
         assertEquals(amountStudent, list.size());
     }
+
+    @Test
+    void getPort() {
+        Integer port = restTemplate.getForObject("http://localhost:8080/get-port", Integer.class);
+        assertEquals(8080, port);
+
+
+    }
 }

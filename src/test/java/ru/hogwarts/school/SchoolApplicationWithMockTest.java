@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts.school.controller.AvatarController;
 import ru.hogwarts.school.controller.FacultyController;
+import ru.hogwarts.school.controller.InfoController;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -76,6 +77,9 @@ public class SchoolApplicationWithMockTest {
 
     @InjectMocks
     private AvatarController avatarController;
+
+    @SpyBean
+    private InfoController infoController;
 
     private Student testStudent;
 
@@ -370,8 +374,6 @@ public class SchoolApplicationWithMockTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(list.size()));
-
-
     }
 
     @Test
@@ -391,8 +393,13 @@ public class SchoolApplicationWithMockTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(testFaculty.getStudents().size()));
+    }
 
+    @Test
+    void getPort() throws Exception {
 
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/get-port")).andExpect(status().isOk()).andReturn();
+        assertEquals("8080", result.getResponse().getContentAsString());
     }
 
 }
