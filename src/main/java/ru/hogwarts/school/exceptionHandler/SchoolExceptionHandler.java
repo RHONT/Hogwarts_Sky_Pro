@@ -8,7 +8,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class SchoolExceptionHandler {
 
-    @ExceptionHandler({NotFoundStudentException.class, NotFoundFacultyException.class, IllegalFormatContentException.class, PageErrorInputException.class})
+    @ExceptionHandler({NotFoundStudentException.class,
+            NotFoundFacultyException.class,
+            IllegalFormatContentException.class,
+            PageErrorInputException.class,
+            NotSupportedClassException.class,
+            NoContentException.class})
     public ResponseEntity<String> NotFound(Exception exception) {
         return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
     }

@@ -32,7 +32,7 @@ public class FacultyController {
 
     @GetMapping
     public List<Faculty> getAllStudent() {
-        return facultyServices.getAllStudent();
+        return facultyServices.getAllFaculty();
     }
 
     @PutMapping

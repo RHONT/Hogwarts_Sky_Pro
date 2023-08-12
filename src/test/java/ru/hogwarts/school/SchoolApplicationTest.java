@@ -117,7 +117,11 @@ public class SchoolApplicationTest {
     @Test
     void StudentControllerUpdate() {
         Student student = studentController.getByName("update").getBody();
-        student.setAge(300);
+        if (student != null) {
+            student.setAge(300);
+        } else {
+            throw new NotFoundStudentException();
+        }
 
         ResponseEntity<Student> exchange = restTemplate.exchange(beginStud, HttpMethod.PUT, new HttpEntity<>(student), Student.class);
 
