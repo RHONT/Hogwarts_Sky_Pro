@@ -1,9 +1,7 @@
 package ru.hogwarts.school.services;
 
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.web.config.QuerydslWebConfiguration;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
 import ru.hogwarts.school.entityDto.FacultyDTO;
@@ -184,9 +182,9 @@ public class StudentServices {
     public void nonSynchronizePrintSixName() {
         log.info("method nonSynchronizePrintSixName is run");
         Queue<Student> all = new ArrayDeque<>(studentRepository.findAll());
-        printTwoNamesNoSynchro(all, 2);
-        Thread t1 = new Thread(() -> printTwoNamesNoSynchro(all, 2));
-        Thread t2 = new Thread(() -> printTwoNamesNoSynchro(all, 2));
+        printNamesNoSynchro(all, 2);
+        Thread t1 = new Thread(() -> printNamesNoSynchro(all, 2));
+        Thread t2 = new Thread(() -> printNamesNoSynchro(all, 2));
         t1.start();
         t2.start();
 
@@ -195,20 +193,20 @@ public class StudentServices {
     public void synchronizePrintSixName() {
         log.info("method synchronizePrintSixName is run");
         Queue<Student> all = new ArrayDeque<>(studentRepository.findAll());
-        printTwoNamesSynchro(all, 2);
-        Thread t1 = new Thread(() -> printTwoNamesSynchro(all, 2));
-        Thread t2 = new Thread(() -> printTwoNamesSynchro(all, 2));
+        printNamesSynchro(all, 2);
+        Thread t1 = new Thread(() -> printNamesSynchro(all, 2));
+        Thread t2 = new Thread(() -> printNamesSynchro(all, 2));
         t1.start();
         t2.start();
     }
 
-    private synchronized void printTwoNamesSynchro(Queue<Student> queue, int amount) {
+    private synchronized void printNamesSynchro(Queue<Student> queue, int amount) {
         for (int i = 0; i < amount; i++) {
             System.out.println(queue.poll());
         }
     }
 
-    private void printTwoNamesNoSynchro(Queue<Student> queue, int amount) {
+    private void printNamesNoSynchro(Queue<Student> queue, int amount) {
         for (int i = 0; i < amount; i++) {
             System.out.println(queue.poll());
         }
