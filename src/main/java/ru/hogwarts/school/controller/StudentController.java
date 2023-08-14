@@ -79,7 +79,12 @@ public class StudentController {
     }
 
     @GetMapping("/name-start-with-A")
-    public List<Student> getStudentNameStartWithA() {
-        return studentServices.getStudentNameStartWithA();
+    public ResponseEntity<List<Student>> getStudentNameStartWithA() {
+        return ResponseEntity.ok(studentServices.getStudentNameStartWithA());
+    }
+
+    @GetMapping("/get-avg-age-with-stream")
+    public ResponseEntity<Double> getAVGAgeWithStream() {
+        return ResponseEntity.ok(studentServices.getAVGAgeWithStream());
     }
 }

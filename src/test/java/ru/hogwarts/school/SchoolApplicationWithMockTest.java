@@ -397,9 +397,9 @@ public class SchoolApplicationWithMockTest {
 
     @Test
     void getPort() throws Exception {
-
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/get-port")).andExpect(status().isOk()).andReturn();
         assertEquals("8080", result.getResponse().getContentAsString());
     }
+
 
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
@@ -238,7 +239,31 @@ public class SchoolApplicationTest {
     void getPort() {
         Integer port = restTemplate.getForObject("http://localhost:8080/get-port", Integer.class);
         assertEquals(8080, port);
-
-
     }
+
+    @Test
+    void StudentControllergetStudentNameStartWithA() {
+        List list = null;
+        list = restTemplate.getForObject(beginStud + "name-start-with-A", List.class);
+        assertFalse(list.isEmpty());
+    }
+
+    @Test
+    void StudentControllergetAVGAgeWithStream() {
+        Double result = restTemplate.getForObject(beginStud + "/get-avg-age-with-stream", Double.class);
+        assertFalse(result <= 0);
+    }
+
+    @Test
+    void FacultyControllerGetSomeDigit() {
+        Long result = restTemplate.getForObject(beginFaculty + "/get-reduce-method", Long.class);
+        assertFalse(result <= 0);
+    }
+
+    @Test
+    void FacultyControllerGetLongestFacultyName() {
+        String result = restTemplate.getForObject(beginFaculty + "/get-longest-faculty-name", String.class);
+        assertTrue(result.length() > 0);
+    }
+
 }

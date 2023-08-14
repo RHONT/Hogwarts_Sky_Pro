@@ -163,8 +163,20 @@ public class StudentServices {
 
         Function<List<Student>, List<Student>> finisher = Function.identity();
 
-        return all.parallelStream()
+        List<Student> result = all.parallelStream()
                 .filter(e -> e.getName().startsWith("А"))
                 .collect(Collector.of(supplier, accumulator, combiner, finisher, Collector.Characteristics.CONCURRENT));
+
+        log.debug("result Collection<Student> = {}", result);
+
+        return result;
+    }
+
+    public Double getAVGAgeWithStream() {
+        log.info("method getStudentNameStartWithA is run");
+        List<Student> all = studentRepository.findAll();
+        OptionalDouble average = all.parallelStream().mapToInt(Student::getAge).average();
+        log.debug("avg result = {}", average.orElse(0d));
+        return average.orElse(0d);
     }
 }
