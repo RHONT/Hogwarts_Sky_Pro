@@ -87,4 +87,14 @@ public class StudentController {
     public ResponseEntity<Double> getAVGAgeWithStream() {
         return ResponseEntity.ok(studentServices.getAVGAgeWithStream());
     }
+
+    @GetMapping("/non-synchronize-print-six-name")
+    public void nonSynchronizePrintSixName() {
+        studentServices.nonSynchronizePrintSixName();
+    }
+
+    @GetMapping("/synchronize-print-six-name")
+    public void SynchronizePrintSixName() {
+        studentServices.synchronizePrintSixName();
+    }
 }
