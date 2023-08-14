@@ -12,6 +12,11 @@ import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 @Service
 public class StudentServices {
@@ -139,4 +144,6 @@ public class StudentServices {
         log.debug("Collection<Student> =" + fiveLastIdStudent);
         return fiveLastIdStudent;
     }
+
+    
 }
