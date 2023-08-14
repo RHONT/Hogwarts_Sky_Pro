@@ -145,5 +145,26 @@ public class StudentServices {
         return fiveLastIdStudent;
     }
 
-    
+    public List<Student> getStudentNameStartWithA() {
+        log.info("method getStudentNameStartWithA is run");
+        List<Student> all = studentRepository.findAll();
+        log.debug("Collection<Student> = {}", all);
+
+        Supplier<List<Student>> supplier = ArrayList::new;
+
+        BiConsumer<List<Student>, Student> accumulator = List::add;
+
+        BinaryOperator<List<Student>> combiner = (listLeft, listRight) -> {
+            List<Student> result = Collections.synchronizedList(new ArrayList<>());
+            result.addAll(listLeft);
+            result.addAll(listRight);
+            return result;
+        };
+
+        Function<List<Student>, List<Student>> finisher = Function.identity();
+
+        return all.parallelStream()
+                .filter(e -> e.getName().startsWith("А"))
+                .collect(Collector.of(supplier, accumulator, combiner, finisher, Collector.Characteristics.CONCURRENT));
+    }
 }
