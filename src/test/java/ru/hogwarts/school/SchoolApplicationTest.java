@@ -8,6 +8,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
 import ru.hogwarts.school.controller.FacultyController;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.exceptionHandler.NotFoundStudentException;
@@ -117,7 +118,11 @@ public class SchoolApplicationTest {
     @Test
     void StudentControllerUpdate() {
         Student student = studentController.getByName("update").getBody();
-        student.setAge(300);
+        if (student != null) {
+            student.setAge(300);
+        } else {
+            throw new NotFoundStudentException();
+        }
 
         ResponseEntity<Student> exchange = restTemplate.exchange(beginStud, HttpMethod.PUT, new HttpEntity<>(student), Student.class);
 
@@ -229,4 +234,36 @@ public class SchoolApplicationTest {
         List<Student> list = restTemplate.getForObject(beginFaculty + "get-all-student-by-id-faculty/" + faculty.getId(), List.class);
         assertEquals(amountStudent, list.size());
     }
+
+    @Test
+    void getPort() {
+        Integer port = restTemplate.getForObject("http://localhost:8080/get-port", Integer.class);
+        assertEquals(8080, port);
+    }
+
+    @Test
+    void StudentControllergetStudentNameStartWithA() {
+        List list = null;
+        list = restTemplate.getForObject(beginStud + "name-start-with-A", List.class);
+        assertFalse(list.isEmpty());
+    }
+
+    @Test
+    void StudentControllergetAVGAgeWithStream() {
+        Double result = restTemplate.getForObject(beginStud + "/get-avg-age-with-stream", Double.class);
+        assertFalse(result <= 0);
+    }
+
+    @Test
+    void FacultyControllerGetSomeDigit() {
+        Long result = restTemplate.getForObject(beginFaculty + "/get-reduce-method", Long.class);
+        assertFalse(result <= 0);
+    }
+
+    @Test
+    void FacultyControllerGetLongestFacultyName() {
+        String result = restTemplate.getForObject(beginFaculty + "/get-longest-faculty-name", String.class);
+        assertTrue(result.length() > 0);
+    }
+
 }

@@ -1,4 +1,4 @@
-CREATE TABLE hogwards.public.car
+CREATE TABLE hogwards.public.human
 (
     id      serial primary key,
     name    varchar(15),
@@ -7,7 +7,7 @@ CREATE TABLE hogwards.public.car
 
 );
 
-CREATE TABLE hogwards.public.human
+CREATE TABLE hogwards.public.car
 (
     id    serial primary key,
     brand varchar(15),

@@ -17,9 +17,11 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.hogwarts.school.controller.AvatarController;
 import ru.hogwarts.school.controller.FacultyController;
+import ru.hogwarts.school.controller.InfoController;
 import ru.hogwarts.school.controller.StudentController;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -76,6 +78,9 @@ public class SchoolApplicationWithMockTest {
 
     @InjectMocks
     private AvatarController avatarController;
+
+    @SpyBean
+    private InfoController infoController;
 
     private Student testStudent;
 
@@ -370,8 +375,6 @@ public class SchoolApplicationWithMockTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(list.size()));
-
-
     }
 
     @Test
@@ -391,8 +394,57 @@ public class SchoolApplicationWithMockTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(testFaculty.getStudents().size()));
+    }
 
+    @Test
+    void getPort() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/get-port")).andExpect(status().isOk()).andReturn();
+        assertEquals("8080", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    void StudentControllergetStudentNameStartWithA() throws Exception {
+
+        List<Student> list = new ArrayList<>(List.of(
+                new Student(1L, "А", 1),
+                new Student(2L, "А", 1),
+                new Student(3L, "3", 1)
+        ));
+
+        when(studentRepository.findAll()).thenReturn(list);
+        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/student/name-start-with-A"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(2));
 
     }
+
+    @Test
+    void StudentControllergetAVGAgeWithStream() throws Exception {
+        List<Student> list = new ArrayList<>(List.of(
+                new Student(1L, "А", 10),
+                new Student(2L, "А", 20),
+                new Student(3L, "3", 30)
+        ));
+
+        when(studentRepository.findAll()).thenReturn(list);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/student/get-avg-age-with-stream"))
+                .andExpect(status().isOk()).andReturn();
+        assertEquals("20.0", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    void FacultyControllerGetSomeDigit() throws Exception {
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/faculty/get-reduce-method"))
+                .andExpect(status().isOk()).andReturn();
+        long resul = Long.parseLong(result.getResponse().getContentAsString());
+        assertTrue(resul > 0);
+    }
+
+    @Test
+    void FacultyControllerGetLongestFacultyName() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("http://localhost:8080/faculty/get-longest-faculty-name"))
+                .andExpect(status().isOk());
+    }
+
 
 }

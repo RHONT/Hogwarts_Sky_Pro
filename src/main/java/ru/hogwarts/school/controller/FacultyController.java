@@ -32,7 +32,7 @@ public class FacultyController {
 
     @GetMapping
     public List<Faculty> getAllStudent() {
-        return facultyServices.getAllStudent();
+        return facultyServices.getAllFaculty();
     }
 
     @PutMapping
@@ -58,6 +58,16 @@ public class FacultyController {
     @GetMapping("/get-all-student-by-id-faculty/{id_faculty}")
     public Collection<Student> getAllStudentByFacultyId(@PathVariable Long id_faculty) {
         return facultyServices.getAllStudentOfSelectedFaculty(id_faculty);
+    }
+
+    @GetMapping("/get-longest-faculty-name")
+    public String getLongestFacultyName() {
+        return facultyServices.getLongestFacultyName();
+    }
+
+    @GetMapping("/get-reduce-method")
+    public Long getSomeDigit() {
+        return facultyServices.getSomeDigit();
     }
 
 
